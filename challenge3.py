@@ -2,7 +2,7 @@ import re
 import math
 
 DIGITS = list(map(str, range(10)))
-NONE_VALID_SYMBOLS = set(['.'] + DIGITS)
+NON_VALID_SYMBOLS = set(['.'] + DIGITS)
 
 
 def get_value(lines, line_number, line_width, index):
@@ -59,7 +59,7 @@ def stage1(file_path='input3.txt'):
             start, end = match.start(0), match.end(0)
             value = int(line[start: end])
             if set(adjacent_symbols(lines, line_number, start,
-                                    end).values()).issubset(NONE_VALID_SYMBOLS):
+                                    end).values()).issubset(NON_VALID_SYMBOLS):
                 continue
             part_sum += value
     print(part_sum)
