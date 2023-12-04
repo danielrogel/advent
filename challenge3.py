@@ -1,10 +1,5 @@
 import re
 import math
-file_path = 'input3.txt'
-
-with open(file_path, 'r') as fp:
-    lines = fp.readlines()
-    lines = [line.replace('\n', '') for line in lines]
 
 DIGITS = list(map(str, range(10)))
 NONE_VALID_SYMBOLS = set(['.'] + DIGITS)
@@ -40,7 +35,24 @@ def get_number_desc(lines, line_number, index, line_width=140):
     return start, end, int(lines[line_number][start:end])
 
 
-def stage1():
+def create_numbers_set(lines, line_number, start, end):
+    number_matches = set()
+    for key, value in adjacent_symbols(lines, line_number, start, end).items():
+        if value in DIGITS:
+            line_number_k, index = key.split('_')
+            start_k, end_k, value_k = get_number_desc(
+                lines, int(line_number_k), int(index))
+            number_matches.add(
+                (int(line_number_k), start_k, end_k, value_k))
+    return number_matches
+
+
+def stage1(file_path='input3.txt'):
+
+    with open(file_path, 'r') as fp:
+        lines = fp.readlines()
+        lines = [line.replace('\n', '') for line in lines]
+
     part_sum = 0
     for line_number, line in enumerate(lines):
         for match in re.finditer(r'\d+', line):
@@ -53,24 +65,22 @@ def stage1():
     print(part_sum)
 
 
-def stage2():
-    part_sum = 0
+def stage2(file_path='input3.txt'):
+
+    with open(file_path, 'r') as fp:
+        lines = fp.readlines()
+        lines = [line.replace('\n', '') for line in lines]
+
+    part_mul_sum = 0
     for line_number, line in enumerate(lines):
         for match in re.finditer(r'\*', line):
             start, end = match.start(0), match.end(0)
-            number_matches = set()
-            for key, value in adjacent_symbols(lines, line_number, start, end).items():
-                if value in DIGITS:
-                    line_number_k, index = key.split('_')
-                    start_k, end_k, value_k = get_number_desc(
-                        lines, int(line_number_k), int(index))
-                    number_matches.add(
-                        (int(line_number_k), start_k, end_k, value_k))
+            number_matches = create_numbers_set(lines, line_number, start, end)
             if len(number_matches) > 1:
-                part_sum += math.prod([tuple_[-1]
-                                      for tuple_ in number_matches])
+                part_mul_sum += math.prod([tuple_[-1]
+                                           for tuple_ in number_matches])
 
-    print(part_sum)
+    print(part_mul_sum)
 
 
 stage1()
