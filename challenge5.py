@@ -30,31 +30,27 @@ class MappingObject:
     def __getitem__(self, __key: int | range) -> int | range:
         items_arr = []
         for range_object in self.ranges_list:
-
             if type(__key) is list:
                 key_cop = __key.copy()
                 __key = []
                 for key in key_cop:
-                    if key in range_object:
-                        if type(range_object[key]) is int:
-                            items_arr.append(range_object[key])
-                        else:
-                            in_, before, after = range_object[key]
-                            items_arr.append(in_)
-
-                            if before.start < before.stop:
-                                __key += [before]
-                            if after.start < after.stop:
-                                __key += [after]
-            else:
-                if __key in range_object:
-                    if type(range_object[__key]) is int:
-                        items_arr.append(range_object[__key])
-                    else:
-                        in_, before, after = range_object[__key]
-
+                    if type(range_object[key]) is int:
+                        items_arr.append(range_object[key])
+                    elif type(range_object[key]) is not None:
+                        in_, before, after = range_object[key]
                         items_arr.append(in_)
-                        __key = [before, after]
+                        if len(before) > 0:
+                            __key += [before]
+                        if len(after) > 0:
+                            __key += [after]
+
+            else:
+                if type(range_object[__key]) is int:
+                    items_arr.append(range_object[__key])
+                elif type(range_object[key]) is not None:
+                    in_, before, after = range_object[__key]
+                    items_arr.append(in_)
+                    __key = [before, after]
 
         if len(self.ranges_list) == 0:
             return __key
