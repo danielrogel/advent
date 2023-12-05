@@ -36,7 +36,7 @@ class MappingObject:
                 for key in key_cop:
                     if type(range_object[key]) is int:
                         items_arr.append(range_object[key])
-                    elif type(range_object[key]) is not None:
+                    elif range_object[key] is not None:
                         in_, before, after = range_object[key]
                         items_arr.append(in_)
                         if len(before) > 0:
@@ -47,7 +47,7 @@ class MappingObject:
             else:
                 if type(range_object[__key]) is int:
                     items_arr.append(range_object[__key])
-                elif type(range_object[key]) is not None:
+                elif range_object[__key] is not None:
                     in_, before, after = range_object[__key]
                     items_arr.append(in_)
                     __key = [before, after]
@@ -72,7 +72,7 @@ class Mapping:
         for mapping_object in self.mapping_objects_list:
             if type(value) is list:
                 value = list(set(sum([mapping_object[val]
-                             for val in value], [])))
+                                      for val in value], [])))
             else:
                 value = mapping_object[value]
 
