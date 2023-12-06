@@ -1,6 +1,5 @@
 
 from dataclasses import dataclass
-import tqdm
 from typing import Tuple
 
 
@@ -27,40 +26,30 @@ class RangeObject:
 class MappingObject:
     ranges_list: list[RangeObject]
 
-    def __getitem__(self, __key: int | range) -> int | range:
+    def __getitem__(self, __key: int | range | list) -> int | range | list:
         items_arr = []
         for range_object in self.ranges_list:
             if type(__key) is list:
                 key_cop = __key.copy()
                 __key = []
                 for key in key_cop:
-                    if type(range_object[key]) is int:
-                        items_arr.append(range_object[key])
-                    elif range_object[key] is not None:
-                        in_, before, after = range_object[key]
-                        items_arr.append(in_)
-                        if len(before) > 0:
-                            __key += [before]
-                        if len(after) > 0:
-                            __key += [after]
-
-            else:
-                if type(range_object[__key]) is int:
-                    items_arr.append(range_object[__key])
-                elif range_object[__key] is not None:
-                    in_, before, after = range_object[__key]
+                    in_, before, after = range_object[key]
                     items_arr.append(in_)
-                    __key = [before, after]
+                    __key += bool(len(before)) * [before] \
+                        + bool(len(after)) * [after]
+            elif type(__key) is int and range_object[__key] is not None:
+                items_arr.append(range_object[__key])
+            elif type(__key) is range:
+                in_, before, after = range_object[__key]
+                items_arr.append(in_)
+                __key = [before, after]
 
-        if len(self.ranges_list) == 0:
+        if len(items_arr) == 0:
             return __key
-        if type(__key) is list:
+        elif type(__key) is list:
             return items_arr + __key
         else:
-            if len(items_arr) == 0:
-                return __key
-            else:
-                return items_arr[0]
+            return items_arr[0]
 
 
 @dataclass
