@@ -1,10 +1,10 @@
 import re
 import math
 
-file_path = 'input6.txt'
 
-with open(file_path, 'r') as fp:
-    lines = fp.readlines()
+def open_file(file_path='input6.txt'):
+    with open(file_path, 'r') as fp:
+        return fp.readlines()
 
 
 def parse_line_first(line):
@@ -26,12 +26,14 @@ def calc_options(time, distance):
 
 
 def stage1():
+    lines = open_file()
     time_arr, distances_arr = [parse_line_first(line) for line in lines]
     print(math.prod([calc_options(time, distance)
           for time, distance in zip(time_arr, distances_arr)]))
 
 
 def stage2():
+    lines = open_file()
     time, distance = [parse_line_seconed(line) for line in lines]
     print(calc_options(time, distance))
 
