@@ -1,6 +1,5 @@
 
 from dataclasses import dataclass
-import tqdm
 from typing import Tuple
 
 
