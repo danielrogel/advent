@@ -9,12 +9,6 @@ class Hand(object):
         self.wildcard, self.cards, self.bid = wildcard, cards, bid
         self.strength = self.calc_strength()
 
-    def convert_to_integer(string):
-        integer_value = 0
-        for char in string:
-            integer_value = integer_value * 256 + ord(char)
-        return integer_value
-
     def calc_type_value(self):
         hand_type = ["11111", "2111", "221", "311", "32", "41", "5"]
         rank_count = {}
