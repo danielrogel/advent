@@ -4,7 +4,6 @@ Card = namedtuple('Card', ['rank', 'value'])
 
 
 class Hand(object):
-
     def __init__(self, cards, bid, wildcard=False):
         self.wildcard, self.cards, self.bid = wildcard, cards, bid
         self.strength = self.calc_strength()
@@ -39,10 +38,10 @@ def line_to_hand(line, wildcard=False):
     line = line.split()
     rank_labels = ['2', '3', '4', '5', '6',
                    '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
-    rank_labels_wildcard = ['J', '2', '3', '4',
-                            '5', '6', '7', '8', '9', 'T', 'Q', 'K', 'A']
-    cards = [Card(rank, rank_labels_wildcard.index(rank) if wildcard
-                  else rank_labels.index(rank)) for rank in line[0]]
+    if wildcard:
+        rank_labels.remove('J')
+        rank_labels.insert(0, 'J')
+    cards = [Card(rank, rank_labels.index(rank)) for rank in line[0]]
     bid = int(line[1])
     return Hand(cards, bid, wildcard)
 
