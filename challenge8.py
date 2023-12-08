@@ -17,8 +17,8 @@ movement_dict = dict([parse_line(line) for line in lines[2:]])
 def count_steps(curr_position, stage):
     count = 0
     while True:
-        curr_position = movement_dict[curr_position][0 if l_r_inst[count % len(
-            l_r_inst)] == 'L' else 1]
+        c = l_r_inst[count % len(l_r_inst)]
+        curr_position = movement_dict[curr_position][0 if c == 'L' else 1]
         count += 1
         if stage == 2 and curr_position[-1] == 'Z':
             return count
