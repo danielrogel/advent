@@ -3,7 +3,7 @@ import math
 
 
 def open_file(file_path='input6.txt'):
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         return fp.readlines()
 
 

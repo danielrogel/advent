@@ -3,7 +3,7 @@ from collections import namedtuple
 Card = namedtuple('Card', ['rank', 'value'])
 
 
-class Hand(object):
+class Hand:
     def __init__(self, cards, bid, wildcard=False):
         self.wildcard, self.cards, self.bid = wildcard, cards, bid
         self.strength = self.calc_strength()
@@ -15,7 +15,7 @@ class Hand(object):
             rank_count[card.rank] = rank_count.get(card.rank, 0) + 1
         if self.wildcard:
             joker_count = rank_count.get('J', 0)
-            if 'J' in rank_count.keys():
+            if 'J' in rank_count:
                 del rank_count["J"]
             if len(rank_count) > 0:
                 rank_count[max(rank_count, key=rank_count.get)] += joker_count
@@ -47,7 +47,7 @@ def line_to_hand(line, wildcard=False):
 
 
 def stage(stage_num, file_path='input7.txt'):
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         lines = fp.readlines()
 
     # Calculate the total bid amount
@@ -56,7 +56,7 @@ def stage(stage_num, file_path='input7.txt'):
         for rank, card in zip(
             range(1, len(lines) + 1),
             sorted(
-                [line_to_hand(line, wildcard=(stage_num == 2))
+                [line_to_hand(line, wildcard=stage_num == 2)
                  for line in lines],
                 key=lambda x: x.strength
             )

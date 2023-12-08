@@ -10,8 +10,7 @@ def to_str(num):
     '''digit representating to string of the digit'''
     if not num.isnumeric():
         return str(DIGIT_NAMES.index(num) + 1)
-    else:
-        return str(num)
+    return str(num)
 
 
 def number_from_line(line):
@@ -21,19 +20,19 @@ def number_from_line(line):
 
 
 def stage1(file_path='input1.txt'):
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         lines = fp.readlines()
 
-    print(sum([int(re.findall(r'\d', line)[0] + re.findall(r'\d', line)[-1])
-               for line in lines]))
+    print(sum(int(re.findall(r'\d', line)[0] + re.findall(r'\d', line)[-1])
+              for line in lines))
 
 
 def stage2(file_path='input1.txt'):
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         lines = fp.readlines()
 
-    print(sum([number_from_line(line)
-               for line in lines]))
+    print(sum(number_from_line(line)
+              for line in lines))
 
 
 stage1()

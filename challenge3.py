@@ -8,14 +8,15 @@ NON_VALID_SYMBOLS = set(['.'] + DIGITS)
 def get_value(lines, line_number, line_width, index):
     if line_number < 0 or index < 0 or index >= line_width or line_number >= len(lines):
         return '.'
-    else:
-        return lines[line_number][index]
+    return lines[line_number][index]
 
 
 def adjacent_symbols(lines, line_number, start, end, line_width=140):
     line_numbers = list(range(line_number - 1, line_number + 2))
     index_numbers = list(range(start - 1, end + 1))
-    return {str(line_number_k)+'_'+str(index_k): get_value(lines, line_number_k, line_width, index_k) for line_number_k in line_numbers for index_k in index_numbers}
+    return {str(line_number_k)+'_'+str(index_k):
+            get_value(lines, line_number_k, line_width, index_k)
+            for line_number_k in line_numbers for index_k in index_numbers}
 
 
 def get_number_desc(lines, line_number, index, line_width=140):
@@ -49,7 +50,7 @@ def create_numbers_set(lines, line_number, start, end):
 
 def stage1(file_path='input3.txt'):
 
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         lines = fp.readlines()
         lines = [line.replace('\n', '') for line in lines]
 
@@ -67,7 +68,7 @@ def stage1(file_path='input3.txt'):
 
 def stage2(file_path='input3.txt'):
 
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         lines = fp.readlines()
         lines = [line.replace('\n', '') for line in lines]
 

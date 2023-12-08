@@ -15,8 +15,9 @@ def parse_line(line):
     line = line.replace('\n', '').split(':')
     card_num = int(line[0].split(' ')[-1])
     winning_numbers, my_numbers = [[int(num) for num in re.split(
-        "\s+", val) if num != ''] for val in line[-1].split('|')]
-    return {'card_num': card_num, "winning_numbers": set(winning_numbers), "my_numbers": set(my_numbers)}
+        r"\s+", val) if num != ''] for val in line[-1].split('|')]
+    return {'card_num': card_num, "winning_numbers": set(winning_numbers),
+            "my_numbers": set(my_numbers)}
 
 
 def calc_worth(scrath_card):
@@ -24,15 +25,15 @@ def calc_worth(scrath_card):
 
 
 def stage1(file_path='input4.txt'):
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         lines = fp.readlines()
     fp.close()
     card_arr = [ScratchCard(**parse_line(line)) for line in lines]
-    print(sum([calc_worth(card) for card in card_arr]))
+    print(sum(calc_worth(card) for card in card_arr))
 
 
 def stage2(file_path='input4.txt'):
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         lines = fp.readlines()
     fp.close()
     card_arr = sorted([ScratchCard(**parse_line(line))

@@ -10,13 +10,14 @@ class RangeObject:
     length: int
 
     def __getitem__(self, __key: int | range) -> int | Tuple[range, ...]:
-        if type(__key) is range:
+        if isinstance(__key, range):
             return range(max(__key.start, self.start_from) - self.start_from + self.start_to, min(
-                __key.stop, self.start_from + self.length) - self.start_from + self.start_to), range(__key.start, min(self.start_from, __key.stop)), range(max(self.start_from + self.length, __key.start), __key.stop)
-        elif __key >= self.start_from and __key < self.start_from + self.length:
+                __key.stop, self.start_from + self.length) - self.start_from + self.start_to), \
+                range(__key.start, min(self.start_from, __key.stop)), range(
+                    max(self.start_from + self.length, __key.start), __key.stop)
+        if __key >= self.start_from and __key < self.start_from + self.length:
             return self.start_to + (__key - self.start_from)
-        else:
-            return None
+        return None
 
     def __contains__(self, __key: int):
         return self.__getitem__(__key) is not None
@@ -29,7 +30,7 @@ class MappingObject:
     def __getitem__(self, __key: int | range | list) -> int | range | list:
         items_arr = []
         for range_object in self.ranges_list:
-            if type(__key) is list:
+            if isinstance(__key, list):
                 key_cop = __key.copy()
                 __key = []
                 for key in key_cop:
@@ -37,16 +38,16 @@ class MappingObject:
                     items_arr.append(in_)
                     __key += bool(len(before)) * [before] \
                         + bool(len(after)) * [after]
-            elif type(__key) is int and range_object[__key] is not None:
+            elif isinstance(__key, int) and range_object[__key] is not None:
                 items_arr.append(range_object[__key])
-            elif type(__key) is range:
+            elif isinstance(__key, range):
                 in_, before, after = range_object[__key]
                 items_arr.append(in_)
                 __key = [before, after]
 
         if len(items_arr) == 0:
             return __key
-        elif type(__key) is list:
+        elif isinstance(__key, list):
             return items_arr + __key
         else:
             return items_arr[0]
@@ -59,7 +60,7 @@ class Mapping:
     def __getitem__(self, __key: int | range) -> int | range:
         value = __key
         for mapping_object in self.mapping_objects_list:
-            if type(value) is list:
+            if isinstance(value, list):
                 value = list(set(sum([mapping_object[val]
                                       for val in value], [])))
             else:
@@ -91,15 +92,15 @@ def parse_lines(lines, seed_parse):
             mapping_object = MappingObject([])
         elif mapping_object is not None and line != '':
             mapping_object.ranges_list.append(
-                RangeObject(**dict(zip(['start_to', 'start_from',
-                                        'length'], [int(val) for val in line.split(' ') if val != '']))))
+                RangeObject(**dict(zip(['start_to', 'start_from', 'length'],
+                                       [int(val) for val in line.split(' ') if val != '']))))
     if mapping_object is not None:
         mapping.mapping_objects_list.append(mapping_object)
     return seeds, mapping
 
 
 def stage(file_path='input5.txt', stage_num=1):
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         lines = fp.readlines()
         lines = [line.replace('\n', '') for line in lines]
     seeds, mapping = parse_lines(lines, seed_parse=stage_num)

@@ -19,7 +19,7 @@ def pull_to_dict(pull):
 
 
 def parse_line(line):
-    game_id = int(re.findall('\d+', line)[0])
+    game_id = int(re.findall(r'\d+', line)[0])
     pulls = [a.replace(',', '').split()
              for a in line.split(': ')[-1].split(';')]
     return game_id, pulls
@@ -31,7 +31,7 @@ def calc_power(dict_lst):
 
 
 def stage1(file_path='input2.txt'):
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         lines = fp.readlines()
     game_ids_lst = []
     for line in lines:
@@ -43,7 +43,7 @@ def stage1(file_path='input2.txt'):
 
 
 def stage2(file_path='input2.txt'):
-    with open(file_path, 'r') as fp:
+    with open(file_path, 'r', encoding='utf-8') as fp:
         lines = fp.readlines()
     power = 0
     for line in lines:
